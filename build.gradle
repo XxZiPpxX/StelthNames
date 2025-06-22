@@ -1,0 +1,79 @@
+buildscript {
+    repositories {
+        maven { url = "https://maven.minecraftforge.net" }
+        maven { url = "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:5.1.+'
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+
+group = 'com.tuusuario'
+version = '1.0'
+archivesBaseName = 'stealthnames'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'official', version: '1.20.1'
+    runs {
+        client {
+            workingDirectory project.file('run')
+            mods {
+                stealthnames {
+                    source sourceSets.main
+                }
+            }
+        }
+        server {
+            workingDirectory project.file('run')
+            mods {
+                stealthnames {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = "JourneyMap (Public)"
+        url = "https://jm.gserv.me/repository/maven-public/"
+    }
+    maven {
+        url "https://www.cursemaven.com"
+    }
+    mavenCentral()
+    mavenLocal()
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.4.0'
+
+    // Runtime mod dependency (curse)
+    runtimeOnly fg.deobf("curse.maven:journeymap-32274:5789363")
+}
+
+
+jar {
+    manifest {
+        attributes(
+            "Specification-Title":   "stealthnames",
+            "Specification-Vendor":  "XxZiPpxX",
+            "Implementation-Title":  "stealthnames",
+            "Implementation-Version": project.version,   // ó "1.20.1-47.4.0"
+            "Implementation-Vendor": "XxZiPpxX"
+        )
+    }
+}
